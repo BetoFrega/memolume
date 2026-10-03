@@ -1,0 +1,15 @@
+name: Relato de problema
+description: Relatar um problema com reprodução sintética
+labels: [bug, needs-triage]
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reprodução e comportamento esperado
+      description: Use dados fictícios. Não publique memórias, exportações ou credenciais reais.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versão ou commit

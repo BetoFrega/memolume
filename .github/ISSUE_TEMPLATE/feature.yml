@@ -1,0 +1,16 @@
+name: Proposta de melhoria
+description: Propor um comportamento para o Memolume
+labels: [enhancement, needs-triage]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema e resultado desejado
+      description: Descreva a necessidade usando exemplos fictícios.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Como verificar
+      description: Qual comportamento observável demonstraria a entrega?
