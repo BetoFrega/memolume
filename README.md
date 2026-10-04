@@ -65,7 +65,7 @@ npm run check
 - [Glossário e contexto](CONTEXT.md): fonte, item, evidência, relação, snapshot e mudança.
 - [Arquitetura proposta](docs/architecture.md): fronteiras, contratos e invariantes.
 - [Estratégia de validação](docs/testing.md): percurso integrado e casos de falha.
-- [Roteiro e tickets](docs/roadmap.md): entregas verticais e dependências.
+- [Roteiro e tickets](docs/roadmap.md): 11 entregas aprovadas e publicadas, com dependências nativas no GitHub.
 - [Decisões de arquitetura](docs/adr/README.md): decisões registradas e perguntas ainda abertas.
 - [Guia de contribuição](CONTRIBUTING.md): como propor e validar mudanças.
 - [Segurança e dados pessoais](SECURITY.md): tratamento de fontes e relato privado de vulnerabilidades.
