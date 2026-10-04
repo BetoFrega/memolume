@@ -210,15 +210,15 @@ O núcleo processa e armazena dados localmente, sem analytics, fontes remotas ou
 
 Exportações registram o material incluído e as omissões. Ocultar um valor visualmente não elimina sua presença no arquivo. Índices, snapshots e evidências recebem os mesmos controles de retenção que o conteúdo importado.
 
-Adaptadores contribuem por uma interface documentada e um corpus sintético. A licença livre específica deve ser escolhida antes da distribuição pública. A identificação como ferramenta independente deve permanecer na apresentação do produto.
+Adaptadores contribuem por uma interface documentada e um corpus sintético. A licença inicial MIT foi definida no bootstrap. A identificação como ferramenta independente deve permanecer na apresentação do produto.
 
 ## Testing Decisions
 
-### Fronteira principal proposta
+### Fronteira principal aprovada
 
 O teste principal atravessa o produto pelo comportamento externo: **importar um conjunto fictício → buscar → selecionar na árvore e no grafo → abrir origem → capturar outro estado → comparar → exportar → reimportar**. Essa fronteira exercita os módulos integrados sem testar a forma interna dos componentes.
 
-O recorte de teste permanece proposto. Não há suíte ou testes anteriores do Memolume inspecionados para reutilizar. Os testes descritos aqui serão executados após a implementação.
+O usuário aprovou essa fronteira em 4 de outubro de 2026. Não há suíte nem testes anteriores do aplicativo para reutilizar: a base atual contém somente verificações documentais. Os testes de comportamento descritos aqui serão implementados junto às entregas do produto.
 
 Testes adicionais ficam nas fronteiras públicas dos adaptadores para formatos específicos e nas operações de leitura para garantir preservação das fontes. Evitar testes que apenas reproduzam estruturas internas ou posições de nós.
 

@@ -2,6 +2,8 @@
 
 Este roteiro é uma **proposta para revisão**, ainda sem tickets publicados. Cada ticket entrega um percurso verificável. Bloqueios indicam dependências reais, não prioridade editorial. Histórias 39–52 da especificação são expansões futuras.
 
+A especificação principal está publicada na [issue #1](https://github.com/BetoFrega/memolume/issues/1), com o label `ready-for-agent` e a fronteira de testes aprovada. A aprovação da spec não substitui a revisão da decomposição em tickets abaixo.
+
 | Ordem | Entrega | Bloqueado por |
 | --- | --- | --- |
 | 1 | Validar a primeira fonte e demonstrar leitura com cobertura | Nenhum |

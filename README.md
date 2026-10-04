@@ -58,7 +58,7 @@ npm run check
 
 ## Documentação e planejamento
 
-- [Especificação da primeira versão](docs/product/spec.md): problema, solução, histórias, decisões e critérios de teste.
+- [Especificação da primeira versão](docs/product/spec.md): problema, solução, histórias, decisões e critérios de teste; publicada como [issue #1](https://github.com/BetoFrega/memolume/issues/1), com fronteira de testes aprovada.
 - [Brief de produto e experiência](docs/product/source-specification.md): recorte de UX e material que originou a especificação.
 - [Glossário e contexto](CONTEXT.md): fonte, item, evidência, relação, snapshot e mudança.
 - [Arquitetura proposta](docs/architecture.md): fronteiras, contratos e invariantes.

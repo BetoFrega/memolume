@@ -1,8 +1,10 @@
 # Estratégia de validação
 
-## Fronteira principal proposta
+## Fronteira principal aprovada
 
 Exercitar o comportamento externo integrado: **importar conjunto fictício → buscar → selecionar na árvore e no grafo → abrir origem → observar um segundo estado → comparar → exportar → reimportar**.
+
+Fronteira aprovada pelo usuário em 4 de outubro de 2026.
 
 Preferir esse percurso à multiplicação de testes internos de componentes. Não há prior art de testes do aplicativo neste repositório. A suíte será implementada junto às primeiras entregas; os checks documentais atuais não substituem testes do produto.
 
