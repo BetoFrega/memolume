@@ -1,6 +1,6 @@
 # Memolume: especificação de produto e experiência
 
-> Brief de referência, preservado como proposta anterior ao bootstrap de 3 de outubro de 2026. Licença MIT e criação do repositório foram resolvidas no ADR-0001. Stack, plataforma e distribuição permanecem abertas.
+> Brief de referência, preservado como proposta anterior ao bootstrap de 3 de outubro de 2026. Licença MIT e criação do repositório foram resolvidas no ADR-0001. Stack, plataforma e distribuição permanecem abertas. O ADR-0002 substitui as propostas históricas de dados fictícios obrigatórios, armazenamento automático e envio externo opcional: o requisito atual é validação real privada, RAM por padrão e consolidação explícita próxima da origem.
 
 Especificação proposta do **Memolume**, uma ferramenta independente, livre e de código aberto para explorar visualmente as memórias e as estruturas de memória do ChatGPT Desktop e do Codex. O nome está definido. O documento reúne o brief de produto, o recorte da primeira versão, a arquitetura da informação, os fluxos de uso e os critérios de implementação e teste.
 

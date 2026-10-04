@@ -1,16 +1,17 @@
 # Arquitetura proposta
 
-Estas são fronteiras propostas pela especificação, ainda sem implementação. Stack, armazenamento e empacotamento serão escolhidos após validar uma fonte.
+Estas são fronteiras da especificação, ainda sem implementação. Stack e empacotamento serão escolhidos para sustentar os requisitos obrigatórios do [ADR-0002](adr/0002-private-local-memory.md): nenhuma externalização, RAM por padrão e consolidação explícita próxima da origem.
 
 ```mermaid
 flowchart LR
   F[Seleção local autorizada] --> A[Adaptador somente leitura]
   A --> P[Prévia e cobertura]
-  P --> C[Catálogo normalizado]
+  P --> C[Catálogo normalizado em RAM]
   C --> E[Exploração: árvore, lista, grafo e inspetor]
-  C --> S[Snapshots no armazenamento do Memolume]
+  C --> S[Snapshots em RAM]
   S --> D[Comparação conservadora]
-  S --> X[Exportação local revisada]
+  S --> G[Ação explícita e destino privado próximo verificado]
+  G --> X[Consolidação local revisada]
   X --> I[Reimportação de pacote versionado]
   I --> P
 ```
@@ -23,10 +24,11 @@ flowchart LR
 | Catálogo | Preservar identidade e modalidade; reimportação idêntica não duplica registros. |
 | Busca e projeções | Gerar árvore real, lista equivalente e grafo do mesmo conjunto com estado compartilhado. |
 | Exploração | Manter seleção, filtros, snapshot, histórico de navegação e posições fixadas. |
-| Snapshots | Registrar observação, cobertura, consistência e versão do adaptador; preservar a última coleta válida. |
+| Snapshots | Manter observações, cobertura, consistência e versão do adaptador em RAM; preservar a última coleta válida durante a sessão. |
 | Comparação | Usar identidade nativa confiável; expor ambiguidade e limitar conclusões quando a cobertura for incompleta. |
-| Portabilidade | Exportar e importar pacotes versionados com registros, relações, evidências incluídas e omissões. |
-| Armazenamento próprio | Guardar dados do Memolume e permitir sua remoção sem alterar arquivos originais. |
+| Portabilidade | Consolidar e importar pacotes locais versionados com registros, relações, evidências e omissões; nunca enviar a serviços externos. |
+| Estado e destino | RAM por padrão; gravar somente após ação explícita em área dedicada próxima da origem e verificada como local privada. Sem destino verificável, não gravar. |
+| Isolamento | Bloquear saída externa do processo e filhos; interface e recursos empacotados localmente; impedir conteúdo privado em logs, caches e respostas do agente. |
 
 ## Contrato de fonte
 
@@ -40,4 +42,4 @@ Importação em andamento; fonte vazia; leitura parcial; fonte indisponível; fo
 
 ## Decisões abertas
 
-Escolha do primeiro adaptador real, stack do aplicativo, plataforma inicial, armazenamento local, distribuição, bibliotecas de grafo, tamanho de conjuntos e metas mensuráveis de desempenho. Essas decisões precisam de evidência e ADRs antes de sustentar promessas de suporte.
+Escolha do primeiro adaptador real, stack, plataforma, mecanismo de consolidação privada, distribuição, biblioteca de grafo e metas mensuráveis de desempenho. Nenhuma dessas decisões pode relaxar nenhuma externalização ou RAM por padrão. A condição local de um destino e os limites relacionados ao sistema operacional devem ser verificáveis antes de sustentar uma promessa de suporte.

@@ -4,7 +4,7 @@ Memolume permite explorar registros acessíveis de assistentes, sua estrutura ob
 
 ## Estado
 
-Projeto em preparação. Documentação e planejamento não demonstram implementação nem compatibilidade. Stack do aplicativo, plataforma inicial, armazenamento, empacotamento e distribuição permanecem abertos. Ferramentas documentais usam Node.js 24; isso não escolhe a runtime do produto.
+Projeto em preparação. Documentação e planejamento não demonstram implementação nem compatibilidade. Stack, plataforma, empacotamento e distribuição permanecem abertos. Estado em RAM, nenhuma externalização e consolidação explícita próxima da origem são requisitos definidos. Ferramentas documentais usam Node.js 24; isso não escolhe a runtime do produto.
 
 ## Glossário
 
@@ -24,11 +24,15 @@ Projeto em preparação. Documentação e planejamento não demonstram implement
 | Identidade | Referência persistente a um item; um hash de conteúdo identifica versão, não identidade por si só. |
 | Origem não identificada | Não há vínculo explícito disponível; não autoriza inferir uma origem por similaridade. |
 | Deixou de ser observado | Item ausente numa leitura completa e comparável; não comprova exclusão na fonte. |
-| Demonstração | Conjunto exclusivamente fictício, identificado e separado das fontes pessoais. |
+| Sessão privada | Exploração de dados reais locais, com estado volátil e sem saída externa de conteúdo ou metadados. |
+| Consolidação | Artefato derivado salvo explicitamente em área privada próxima da fonte; não altera o material original. |
 
 ## Invariantes
 
-- Nenhuma escrita nas fontes; nenhuma varredura geral do computador.
+- Nenhuma escrita nos arquivos originais; nenhuma varredura geral do computador.
+- Nenhuma externalização de conteúdo ou metadados por ação do Memolume, inclusive componentes e subprocessos.
+- Estado em RAM por padrão, sem caches, temporários, bancos ou logs privados automáticos.
+- Persistência somente explícita e próxima da origem, em área dedicada cujo destino local seja verificado; condição incerta mantém os dados em RAM.
 - Referências e links simbólicos não ampliam a raiz selecionada automaticamente.
 - Conteúdo importado é dado, inclusive Markdown, links e aparentes instruções.
 - Datas de origem, modificação e observação têm significados distintos.

@@ -8,7 +8,9 @@ Um grafo que apenas aproxima textos semelhantes resolve pouco dessa dificuldade.
 
 ## Solution
 
-Uma aplicação local e independente para selecionar uma fonte, revisar cobertura, explorar itens e relações, conferir origem e comparar estados observados. A primeira versão entrega importação → exploração → origem → snapshots → comparação → exportação/reimportação, com demonstração fictícia separada e pelo menos um adaptador real validado.
+Uma aplicação local e independente para selecionar uma fonte, revisar cobertura, explorar itens e relações, conferir origem e comparar estados observados. A primeira versão entrega importação → exploração → origem → snapshots → comparação → consolidação/reimportação locais, com pelo menos um adaptador real validado usando dados reais privados.
+
+Requisito obrigatório definido pelo usuário: nenhuma externalização de conteúdo ou metadados privados por ação da aplicação; estado em RAM por padrão; consolidação somente explícita, em área privada próxima da fonte e com condição local verificada. Persistência automática e envio externo não são modalidades opcionais. Dados fictícios não são um pré-requisito de implementação ou validação.
 
 Árvore, lista, grafo e inspetor compartilham seleção, busca, filtros e snapshot. A árvore mostra a estrutura observada; agrupamentos inferidos têm apresentação própria. O inspetor oferece Conteúdo, Origem, Relações e Versões. Voltar de uma evidência restaura o percurso anterior.
 
@@ -26,13 +28,13 @@ A exportação oficial do ChatGPT inclui histórico e outros dados da conta, mas
 | Resumo ou lista de memórias fornecidos pelo usuário | Importação de texto com modalidade e origem declaradas. | Identificar cobertura parcial e proveniência fornecida pelo usuário. |
 | Instruções e fontes externas | Camadas próprias, quando incluídas na seleção. | Preservar o tipo original e os limites de acesso. |
 
-O núcleo deve funcionar com dados fictícios e pelo menos um adaptador real validado. Compatibilidade com cada modalidade só pode ser anunciada após demonstrar importação e leitura; as demais aparecem como indisponíveis ou experimentais.
+O núcleo deve funcionar com pelo menos um adaptador real validado em uma sessão local privada. Compatibilidade com cada modalidade só pode ser anunciada após demonstrar importação e leitura; as demais aparecem como indisponíveis ou experimentais. A validação não publica arquivos, conteúdo ou metadados privados da fonte.
 
 ## User Stories
 
 ### Primeira versão
 
-1. Como usuário, quero iniciar com dados fictícios, para compreender o produto antes de selecionar informações pessoais.
+1. Como usuário, quero explorar minha fonte real em uma sessão local privada, para compreender meus registros sem externalizá-los nem exigir um conjunto fictício.
 
 2. Como usuário, quero escolher explicitamente uma fonte, para controlar o conjunto observado.
 
@@ -82,7 +84,7 @@ O núcleo deve funcionar com dados fictícios e pelo menos um adaptador real val
 
 25. Como usuário, quero ver a data informada pela fonte separada da primeira observação, para interpretar a história.
 
-26. Como usuário, quero criar snapshots locais, para preservar estados que posso comparar.
+26. Como usuário, quero criar snapshots em RAM e escolher explicitamente se vou consolidá-los perto da fonte, para comparar estados sem persistência automática.
 
 27. Como usuário, quero comparar dois snapshots, para encontrar registros novos e alterações.
 
@@ -98,15 +100,15 @@ O núcleo deve funcionar com dados fictícios e pelo menos um adaptador real val
 
 33. Como usuário, quero reduzir movimento, para navegar confortavelmente.
 
-34. Como usuário, quero exportar um pacote documentado e reimportável, para preservar e transportar minha investigação.
+34. Como usuário, quero consolidar explicitamente um pacote local documentado e reimportável próximo da origem, para preservar minha investigação sem upload.
 
 35. Como usuário, quero revisar conteúdo e evidências incluídos na exportação, para controlar o que compartilho.
 
-36. Como usuário, quero remover dados armazenados pelo visualizador sem alterar as fontes, para gerir sua retenção.
+36. Como usuário, quero encerrar o estado em RAM ou remover consolidações escolhidas sem alterar as fontes, para gerir sua retenção.
 
-37. Como usuário, quero usar o núcleo sem serviços remotos, para manter a exploração local.
+37. Como usuário, quero impedir qualquer saída externa de conteúdo e metadados pela aplicação e seus componentes, para manter toda a exploração privada no computador.
 
-38. Como contribuidor, quero um contrato documentado de adaptadores e exemplos fictícios, para adicionar fontes sem expor dados pessoais.
+38. Como contribuidor, quero um contrato de adaptadores e uma rotina de validação local privada, para adicionar fontes reais sem publicar dados pessoais.
 
 ### Expansões futuras
 
@@ -136,7 +138,7 @@ O núcleo deve funcionar com dados fictícios e pelo menos um adaptador real val
 
 51. Como usuário, quero ver a cadeia documentada de instruções para um escopo selecionado, para compreender sua aplicação provável.
 
-52. Como usuário, quero ativar recursos semânticos opcionais com indicação do processamento, para decidir sobre eventuais envios externos.
+52. Como usuário, quero ativar recursos semânticos opcionais executados exclusivamente no computador, para explorar por significado mantendo a regra de nenhuma externalização.
 
 ## Implementation Decisions
 
@@ -146,6 +148,7 @@ O núcleo deve funcionar com dados fictícios e pelo menos um adaptador real val
 - Licença inicial MIT; documentação de domínio em contexto único; acompanhamento no GitHub Issues.
 - Base documental antes da implementação, com checagem automatizada. Runtime documental não fixa a stack do aplicativo.
 - Logo inicial gerada; identidade visual de produto ainda pode evoluir.
+- Nenhuma externalização, estado em RAM e consolidação explícita próxima da origem são requisitos obrigatórios definidos pelo usuário em 4 de outubro de 2026. Demonstração fictícia deixa de ser condição do núcleo.
 
 ### Decisões propostas para a implementação
 
@@ -155,13 +158,13 @@ O núcleo deve funcionar com dados fictícios e pelo menos um adaptador real val
 
 3. **Busca e projeções:** produzem lista, árvore e grafo a partir do mesmo conjunto e estado de exploração. Agrupamentos inferidos não substituem a hierarquia original.
 
-4. **Snapshots e comparação:** armazenam estados no espaço próprio do Memolume e calculam diferenças com regras explícitas de identidade e cobertura.
+4. **Snapshots e comparação:** mantêm estados em RAM e calculam diferenças com regras explícitas de identidade e cobertura. História entre sessões exige consolidação explícita e reimportação.
 
 5. **Interface de exploração:** mantém seleção, filtros, vista ativa, snapshot, histórico de navegação e posição do mapa.
 
-6. **Portabilidade:** gera e lê pacotes versionados com entidades, relações, evidências incluídas e manifestos de cobertura.
+6. **Portabilidade:** gera e lê pacotes locais versionados com entidades, relações, evidências incluídas e manifestos de cobertura; salvar é uma ação explícita sujeita às regras de destino privado.
 
-7. **Armazenamento próprio:** guarda índice e snapshots. Preferências, vistas e anotações, quando implementadas, também pertencem ao Memolume.
+7. **Estado e consolidação:** catálogo, índices, evidências, snapshots e navegação ficam em RAM. Preferências e anotações que contiverem dados privados seguem a mesma regra. Dados derivados só são gravados em área dedicada próxima da fonte, autorizada e verificada; a fonte original permanece somente leitura.
 
 A implementação inicial deve preferir uma aplicação local simples e um núcleo testável, sem exigir serviços distribuídos ou múltiplos processos. Empacotamento desktop e bibliotecas de grafo serão escolhidos após validar acesso às fontes e o comportamento de navegação.
 
@@ -206,19 +209,23 @@ Estados obrigatórios incluem importação em andamento, fonte vazia, leitura pa
 
 ### Privacidade e extensão
 
-O núcleo processa e armazena dados localmente, sem analytics, fontes remotas ou modelos externos obrigatórios. Excluir dados do Memolume afeta seu armazenamento; não altera a memória do assistente. A UI oferece controles separados para remover uma fonte da exploração e apagar seus snapshots.
+O núcleo não externaliza conteúdo, metadados, nomes, caminhos ou dados derivados. Não há envio opcional a modelos externos, telemetria, analytics, relatórios de erro remotos ou carregamento de recursos de interface por CDN. A restrição de saída cobre o processo, seus componentes e subprocessos. Servidor de interface local, quando necessário, aceita apenas loopback. Dados privados não são copiados para a área de transferência nem entregues a aplicações externas pelo fluxo.
+
+O estado privado fica em RAM por padrão, sem caches, bancos, temporários ou logs privados automáticos. Encerrar a sessão libera referências do processo; a aplicação não promete apagamento físico da memória, swap ou crash dumps do sistema operacional. Sem consolidação explícita, reabrir exige nova leitura da fonte.
+
+Consolidar ou exportar exige ação explícita, revisão do conteúdo e um destino privado dedicado próximo dos arquivos originais. Nunca reescrever a fonte ou criar armazenamento silenciosamente. Destino em Git, sincronização em nuvem, volume remoto ou condição não verificada impede gravação; o estado continua em RAM. A aplicação não pode prometer controlar backups, capturas ou sincronizadores externos ao seu domínio de execução.
 
 Exportações registram o material incluído e as omissões. Ocultar um valor visualmente não elimina sua presença no arquivo. Índices, snapshots e evidências recebem os mesmos controles de retenção que o conteúdo importado.
 
-Adaptadores contribuem por uma interface documentada e um corpus sintético. A licença inicial MIT foi definida no bootstrap. A identificação como ferramenta independente deve permanecer na apresentação do produto.
+Adaptadores contribuem por uma interface documentada e validação local privada com fonte real autorizada. Essa rotina não envia conteúdo ou metadados às respostas de ferramentas do agente de IA, à CI hospedada, a issues ou ao repositório público. Testes artificiais mínimos de borda são opcionais após conhecer o contrato e não provam compatibilidade com fontes reais. A licença inicial MIT foi definida no bootstrap. A identificação como ferramenta independente deve permanecer na apresentação do produto.
 
 ## Testing Decisions
 
 ### Fronteira principal aprovada
 
-O teste principal atravessa o produto pelo comportamento externo: **importar um conjunto fictício → buscar → selecionar na árvore e no grafo → abrir origem → capturar outro estado → comparar → exportar → reimportar**. Essa fronteira exercita os módulos integrados sem testar a forma interna dos componentes.
+O teste principal atravessa o produto pelo comportamento externo: **ler uma fonte real local autorizada em RAM → buscar → selecionar na árvore e no grafo → abrir origem → capturar outro estado em RAM → comparar → consolidar explicitamente em destino próximo verificado → reimportar**. Essa fronteira exercita os módulos integrados sem testar a forma interna dos componentes e sem transferir conteúdo privado para os artefatos públicos.
 
-O usuário aprovou essa fronteira em 4 de outubro de 2026. Não há suíte nem testes anteriores do aplicativo para reutilizar: a base atual contém somente verificações documentais. Os testes de comportamento descritos aqui serão implementados junto às entregas do produto.
+O usuário aprovou o percurso integrado e, em 4 de outubro de 2026, determinou validação real privada, nenhuma externalização e RAM por padrão. Não há suíte nem testes anteriores do aplicativo para reutilizar: a base atual contém somente verificações documentais. Os testes de comportamento serão implementados junto às entregas do produto.
 
 Testes adicionais ficam nas fronteiras públicas dos adaptadores para formatos específicos e nas operações de leitura para garantir preservação das fontes. Evitar testes que apenas reproduzam estruturas internas ou posições de nós.
 
@@ -242,18 +249,21 @@ Testes adicionais ficam nas fronteiras públicas dos adaptadores para formatos e
 | Pacote exportado | Reimporta conteúdo e relações declarados, com cobertura e omissões preservadas. |
 | Operação somente leitura | Conteúdo, hashes e inventário dos arquivos originais permanecem intactos após o percurso. |
 | Conteúdo hostil no arquivo | É exibido como dado e não executa código nem amplia a seleção de leitura. |
-| Demonstração | Mantém identificação de dados fictícios e separação das fontes pessoais. |
+| Validação real privada | Fonte real é explorada localmente; conteúdo e metadados não aparecem em Git, CI, issues, capturas públicas ou respostas do agente. |
+| Nenhuma externalização | Observação externa ao processo comprova ausência de rede externa; restrição bloqueia saída de componentes e subprocessos. |
+| RAM por padrão | Percurso sem salvar não produz caches, bancos, temporários ou logs privados controlados pelo aplicativo. |
+| Consolidação explícita | Destino próximo e privado é revisado; não altera os arquivos originais; gravação é recusada se a condição local não for verificada. |
 | Operação offline | O fluxo principal termina sem conexão ou chamadas externas. |
 | Retenção | Apagar dados do visualizador remove os dados escolhidos e preserva a fonte original. |
 | Acessibilidade | O percurso principal funciona por teclado, com foco visível, leitura dos rótulos e alternativa em lista. |
 
 Verificação visual deve abranger a largura desktop alvo, uma janela estreita, conteúdo longo, grafos densos, foco por teclado e redução de movimento. A alternativa em lista não pode ser uma representação incompleta do conteúdo disponível no mapa.
 
-Desempenho será medido com conjuntos sintéticos de tamanhos documentados. A entrega deve demonstrar que busca, seleção e expansão local permanecem utilizáveis no tamanho declarado; limites e tempos numéricos precisam ser definidos com a stack e medidos, sem promessas antecipadas.
+Desempenho será medido localmente com a fonte real autorizada. Tamanhos, caminhos e medições vinculadas aos dados privados permanecem locais; só resultados sem conteúdo ou metadados privados podem integrar evidências públicas. A entrega deve demonstrar que busca, seleção e expansão local permanecem utilizáveis nas condições verificadas, sem promessas antecipadas.
 
 ### Critério de conclusão da primeira versão
 
-O percurso central deve funcionar com a demonstração e com pelo menos um adaptador real validado, preservando as fontes. Seleção sincronizada, origem conhecida ou ausência explícita, snapshots comparáveis, exportação reimportável e estados de falha devem cumprir os casos acima.
+O percurso central deve funcionar com pelo menos um adaptador real validado em dados locais privados, preservando os arquivos originais. Nenhuma externalização, RAM por padrão, seleção sincronizada, origem conhecida ou ausência explícita, snapshots comparáveis, consolidação local reimportável e estados de falha devem cumprir os casos acima. Dados fictícios não são um bloqueador de conclusão.
 
 A lista de compatibilidade deve corresponder aos adaptadores efetivamente demonstrados. Especificação publicada, protótipo navegável e integração real validada são entregas diferentes.
 
@@ -271,7 +281,9 @@ A lista de compatibilidade deve corresponder aos adaptadores efetivamente demons
 
 - Apresentar diagnósticos de contradição, duplicidade ou obsolescência como conclusões automáticas.
 
-- Exigir IA externa, conta proprietária ou serviço pago para o fluxo principal.
+- Externalizar conteúdo ou metadados por IA externa, telemetria, analytics, compartilhamento remoto ou dependências, mesmo como recurso opcional.
+
+- Persistir automaticamente dados privados fora da RAM ou consolidar em destino local não verificado.
 
 - Entregar nesta primeira versão colaboração em nuvem, publicação pública de memórias ou edição dos assistentes.
 
@@ -283,11 +295,11 @@ A lista de compatibilidade deve corresponder aos adaptadores efetivamente demons
 
 ### Decisões abertas
 
-Stack do aplicativo, plataforma inicial, distribuição, persistência, biblioteca de grafo e primeiro adaptador real permanecem abertos. Compatibilidade de cada modalidade precisa de amostras autorizadas e validação observável; não pode ser herdada por suposição. Metas de desempenho dependem de corpus e stack medidos.
+Stack do aplicativo, plataforma inicial, distribuição, mecanismo de consolidação próxima da origem, biblioteca de grafo e primeiro adaptador real permanecem abertos. Essas escolhas precisam sustentar nenhuma externalização e estado em RAM; não podem redefinir esses requisitos. Compatibilidade de cada modalidade precisa de validação privada observável, não pode ser herdada por suposição. Metas de desempenho dependem de condições e stack medidas localmente.
 
 ### Ordem de implementação
 
-1. **Validar uma fonte e o contrato:** escolher um adaptador inicial, reunir amostras autorizadas e sintéticas, demonstrar leitura e documentar cobertura.
+1. **Validar uma fonte e o contrato sob isolamento:** escolher um adaptador inicial, verificar ausência de saída externa e leitura em RAM de fonte real autorizada, demonstrar conteúdo/origem localmente e documentar somente o contrato público e seus limites.
 
 2. **Entregar exploração com origem:** importar, buscar, navegar na árvore, lista e grafo e abrir evidências, com estados vazios e de falha.
 
